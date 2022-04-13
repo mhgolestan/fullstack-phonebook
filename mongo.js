@@ -24,15 +24,15 @@ const Person = mongoose.model("Person", personSchema);
 
 //// save data to db
 
-// const note = new Person({
-//   name: name,
-//   number: number,
-// });
+const note = new Person({
+  name: name,
+  number: number,
+});
 
-// note.save().then((result) => {
-//   console.log("person saved!");
-//   mongoose.connection.close();
-// });
+note.save().then((result) => {
+  console.log("person saved!");
+  mongoose.connection.close();
+});
 
 //// fetch data
 Person.find({}).then((result) => {
