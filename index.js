@@ -23,29 +23,6 @@ morgan.token("param", (req, res, param) => {
 });
 */
 
-const persons = [
-  {
-    id: 1,
-    name: "Arto Hellas",
-    number: "040-123456",
-  },
-  {
-    id: 2,
-    name: "Ada Lovelace",
-    number: "39-44-5323523",
-  },
-  {
-    id: 3,
-    name: "Dan Abramov",
-    number: "12-43-234345",
-  },
-  {
-    id: 4,
-    name: "Mary Poppendieck",
-    number: "39-23-6423122",
-  },
-];
-
 app.get("/api/persons", (req, res) => {
   Person.find({}).then((persons) => {
     res.json(persons);
@@ -79,15 +56,10 @@ app.delete("/api/persons/:id", (req, res, next) => {
       res.status(204).end();
     })
     .catch((error) => next(error));
-  // const id = Number(req.params.id);
-  // console.log(id);
-  // console.log(persons.filter((person) => person.id !== id));
-  // res.json(persons.filter((person) => person.id !== id));
 });
 
 app.post("/api/persons", (req, res) => {
   const body = req.body;
-  console.log(body.name);
   if (body.name === undefined) {
     return res.status(400).json({ error: "content missing" });
   }
@@ -98,6 +70,22 @@ app.post("/api/persons", (req, res) => {
   person.save().then((savedPerson) => {
     res.json(savedPerson);
   });
+});
+
+app.put("/api/persons/:id", (request, response, next) => {
+  const body = request.body;
+  const person = {
+    name: body.name,
+    number: body.number,
+  };
+  const options = { new: true };
+
+  Person.findByIdAndUpdate(request.params.id, person, options)
+    .then((updatedPerson) => {
+      console.log(updatedPerson);
+      response.json(updatedPerson);
+    })
+    .catch((error) => next(error));
 });
 
 const unknownEndpoint = (request, response) => {
