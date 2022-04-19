@@ -1,10 +1,11 @@
 const mongoose = require("mongoose");
 
+// eslint-disable-next-line no-undef
 const url = process.env.MONGODB_URI;
 
 mongoose
   .connect(url)
-  .then((result) => {
+  .then(() => {
     console.log("connected to MongoDB");
   })
   .catch((error) => {
@@ -12,8 +13,8 @@ mongoose
   });
 
 const personSchema = new mongoose.Schema({
-  name: String,
-  number: String,
+  name: { type: String, minLength: 2, required: true },
+  number: { type: String, minLength: 3, required: true },
 });
 
 personSchema.set("toJSON", {

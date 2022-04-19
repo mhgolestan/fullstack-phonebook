@@ -1,6 +1,6 @@
 require("dotenv").config();
 const express = require("express");
-const morgan = require("morgan");
+// const morgan = require("morgan");
 const cors = require("cors");
 
 const Person = require("./models/person");
@@ -10,6 +10,7 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static("build"));
 
+// eslint-disable-next-line no-undef
 const PORT = process.env.PORT;
 
 /* morgan logger 
@@ -37,7 +38,7 @@ app.get("/api/info/", (req, res) => {
   });
 });
 
-app.get("/api/persons/:id", (req, res, next) => {
+app.get("/api/persons/:id", (req, res) => {
   Person.findById(req.params.id)
     .then((person) => {
       if (person) {
@@ -54,7 +55,7 @@ app.get("/api/persons/:id", (req, res, next) => {
 
 app.delete("/api/persons/:id", (req, res, next) => {
   Person.findByIdAndRemove(req.params.id)
-    .then((result) => {
+    .then(() => {
       res.status(204).end();
     })
     .catch((error) => next(error));
