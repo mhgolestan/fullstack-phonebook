@@ -56,24 +56,31 @@ app.get("/api/info/", (req, res) => {
   `);
 });
 
-app.get("/api/persons/:id", (req, res) => {
-  Person.findById(req.params.id).then((person) => {
-    res.json(person);
-  });
-  // const id = Number(req.params.id);
-  // const person = persons.find((person) => person.id == id);
-  // if (person) {
-  //   res.json(person);
-  // } else {
-  //   res.status(404).end();
-  // }
+app.get("/api/persons/:id", (req, res, next) => {
+  Person.findById(req.params.id)
+    .then((person) => {
+      if (person) {
+        res.json(person);
+      } else {
+        res.status(404).end();
+      }
+    })
+    .catch((error) => {
+      console.log(error);
+      res.status(400).send({ error: "malformatted id" });
+    });
 });
 
-app.delete("/api/persons/:id", (req, res) => {
-  const id = Number(req.params.id);
-  console.log(id);
-  console.log(persons.filter((person) => person.id !== id));
-  res.json(persons.filter((person) => person.id !== id));
+app.delete("/api/persons/:id", (req, res, next) => {
+  Person.findByIdAndRemove(req.params.id)
+    .then((result) => {
+      res.status(204).end();
+    })
+    .catch((error) => next(error));
+  // const id = Number(req.params.id);
+  // console.log(id);
+  // console.log(persons.filter((person) => person.id !== id));
+  // res.json(persons.filter((person) => person.id !== id));
 });
 
 app.post("/api/persons", (req, res) => {
