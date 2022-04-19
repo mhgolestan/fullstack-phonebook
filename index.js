@@ -10,6 +10,8 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static("build"));
 
+const PORT = process.env.PORT;
+
 /* morgan logger 
 app.use(
   morgan(
@@ -96,29 +98,27 @@ app.post("/api/persons", (req, res) => {
   person.save().then((savedPerson) => {
     res.json(savedPerson);
   });
-
-  // const id = Math.floor(Math.random() * 100);
-  // const name = req.body.name;
-  // const number = req.body.number;
-  // const nameExists = persons.filter((person) => person.name === name).length;
-  // const numberExists = persons.filter(
-  //   (person) => person.number === number
-  // ).length;
-  // if (!nameExists && !numberExists) {
-  //   const person = {
-  //     id: id,
-  //     name: name,
-  //     number: number,
-  //   };
-  //   persons.push(person);
-  //   res.json(persons);
-  // } else {
-  //   res.status(404);
-  //   res.json({ error: "name must be unique" }).end();
-  // }
 });
 
-const PORT = process.env.PORT;
+const unknownEndpoint = (request, response) => {
+  response.status(404).send({ error: "unknown endpoint" });
+};
+
+// handler of requests with unknown endpoint
+app.use(unknownEndpoint);
+
+const errorHandler = (error, request, response, next) => {
+  console.error(error.message);
+
+  if (error.name === "CastError") {
+    return response.status(400).send({ error: "malformatted id" });
+  }
+
+  next(error);
+};
+
+// this has to be the last loaded middleware.
+app.use(errorHandler);
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
