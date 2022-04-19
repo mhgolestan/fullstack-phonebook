@@ -1,19 +1,17 @@
 const mongoose = require("mongoose");
 
-// if (process.argv.length < 5) {
-//   console.log(
-//     "Please provide the password as an argument: node mongo.js <password> <name> <number>"
-//   );
-//   process.exit(1);
-// }
+const url = process.env.MONGODB_URI;
 
-const password = process.argv[2];
-const name = process.argv[3];
-const number = process.argv[4];
+console.log("connecting to", url);
 
-const url = `mongodb+srv://mohammad:${password}@cluster0.x2wiz.mongodb.net/persons_app?retryWrites=true&w=majority`;
-
-mongoose.connect(url);
+mongoose
+  .connect(url)
+  .then((result) => {
+    console.log("connected to MongoDB");
+  })
+  .catch((error) => {
+    console.log("error connecting to MongoDB:", error.message);
+  });
 
 const personSchema = new mongoose.Schema({
   name: String,
@@ -24,12 +22,12 @@ const Person = mongoose.model("Person", personSchema);
 
 //// save data to db
 
-const note = new Person({
+const person = new Person({
   name: name,
   number: number,
 });
 
-note.save().then((result) => {
+person.save().then((result) => {
   console.log("person saved!");
   mongoose.connection.close();
 });

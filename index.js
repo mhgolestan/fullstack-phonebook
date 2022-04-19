@@ -57,13 +57,16 @@ app.get("/api/info/", (req, res) => {
 });
 
 app.get("/api/persons/:id", (req, res) => {
-  const id = Number(req.params.id);
-  const person = persons.find((person) => person.id == id);
-  if (person) {
+  Person.findById(req.params.id).then((person) => {
     res.json(person);
-  } else {
-    res.status(404).end();
-  }
+  });
+  // const id = Number(req.params.id);
+  // const person = persons.find((person) => person.id == id);
+  // if (person) {
+  //   res.json(person);
+  // } else {
+  //   res.status(404).end();
+  // }
 });
 
 app.delete("/api/persons/:id", (req, res) => {
@@ -74,28 +77,41 @@ app.delete("/api/persons/:id", (req, res) => {
 });
 
 app.post("/api/persons", (req, res) => {
-  const id = Math.floor(Math.random() * 100);
-  const name = req.body.name;
-  const number = req.body.number;
-  const nameExists = persons.filter((person) => person.name === name).length;
-  const numberExists = persons.filter(
-    (person) => person.number === number
-  ).length;
-  if (!nameExists && !numberExists) {
-    const person = {
-      id: id,
-      name: name,
-      number: number,
-    };
-    persons.push(person);
-    res.json(persons);
-  } else {
-    res.status(404);
-    res.json({ error: "name must be unique" }).end();
+  const body = req.body;
+  console.log(body.name);
+  if (body.name === undefined) {
+    return res.status(400).json({ error: "content missing" });
   }
+  const person = new Person({
+    name: body.name,
+    number: body.number,
+  });
+  person.save().then((savedPerson) => {
+    res.json(savedPerson);
+  });
+
+  // const id = Math.floor(Math.random() * 100);
+  // const name = req.body.name;
+  // const number = req.body.number;
+  // const nameExists = persons.filter((person) => person.name === name).length;
+  // const numberExists = persons.filter(
+  //   (person) => person.number === number
+  // ).length;
+  // if (!nameExists && !numberExists) {
+  //   const person = {
+  //     id: id,
+  //     name: name,
+  //     number: number,
+  //   };
+  //   persons.push(person);
+  //   res.json(persons);
+  // } else {
+  //   res.status(404);
+  //   res.json({ error: "name must be unique" }).end();
+  // }
 });
 
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT;
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
