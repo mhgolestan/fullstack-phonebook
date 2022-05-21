@@ -1,4 +1,0 @@
-::ffff:127.0.0.1 - - [09/Apr/2022:11:58:32 +0000] "POST /api/persons/ HTTP/1.1" 200 268 "-" "vscode-restclient"
-::ffff:127.0.0.1 - - [09/Apr/2022:11:59:05 +0000] "POST /api/persons/ HTTP/1.1" 200 268 "-" "vscode-restclient"
-::ffff:127.0.0.1 - - [09/Apr/2022:12:01:54 +0000] "POST /api/persons/ HTTP/1.1" 200 268 "-" "vscode-restclient"
-::ffff:127.0.0.1 - - [09/Apr/2022:12:01:58 +0000] "POST /api/persons/ HTTP/1.1" 404 31 "-" "vscode-restclient"

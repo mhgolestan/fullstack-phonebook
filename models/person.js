@@ -18,7 +18,7 @@ const personSchema = new mongoose.Schema({
     minLength: [3, "Must be at least 3 characters"], // changed the error message
     required: true,
   },
-  number: {
+  phone: {
     type: String,
     minLength: [8, "Must be at least 8 digits"],
     validate: {

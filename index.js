@@ -68,7 +68,7 @@ app.post("/api/persons", (req, res, next) => {
   }
   const person = new Person({
     name: body.name,
-    number: body.number,
+    phone: body.phone,
   });
   person
     .save()
@@ -82,7 +82,7 @@ app.put("/api/persons/:id", (request, response, next) => {
   const body = request.body;
   const person = {
     name: body.name,
-    number: body.number,
+    phone: body.phone,
   };
   const options = { new: true, runValidators: true, context: "query" };
 
